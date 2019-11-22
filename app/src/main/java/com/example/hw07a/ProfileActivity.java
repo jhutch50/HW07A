@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.Continuation;
@@ -26,10 +27,14 @@ public class ProfileActivity extends AppCompatActivity {
     ProgressBar progressBar;
     Bitmap bitmapUpload = null;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+
     }
 
     //    Upload Camera Photo to Cloud Storage....
@@ -90,11 +95,15 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
     //    TAKE PHOTO USING CAMERA...
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
+    private void Filechooser(){
+        Intent intent = new Intent();
+        intent.setType("image/");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        if(intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
         }
+
     }
 
     @Override

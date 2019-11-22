@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,7 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-
+    private TextView mStatusTextView;
     private EditText mEmailField;
     private EditText mPasswordField;
 
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
+        mStatusTextView = findViewById(R.id.status);
         mEmailField = findViewById(R.id.fieldEmail);
         mPasswordField = findViewById(R.id.fieldPassword);
 
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
+
+
             }
         });
 
@@ -89,10 +93,11 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent = new Intent(MainActivity.this,ProfileActivity.class);
                             startActivity(intent);
                             //updateUI(user);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("demo", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, "User account already exists.",
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
@@ -126,15 +131,15 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("demo", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, "Authentication Failed",
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
 
                         // [START_EXCLUDE]
-//                        if (!task.isSuccessful()) {
-//                            mStatusTextView.setText(R.string.auth_failed);
-//                        }
+                        if (!task.isSuccessful()) {
+                            mStatusTextView.setText("User already signed in.");
+                        }
 //                        hideProgressDialog();
                         // [END_EXCLUDE]
                     }
