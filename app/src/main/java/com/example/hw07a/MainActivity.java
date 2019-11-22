@@ -37,19 +37,21 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.emailSignInButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
             }
         });
         findViewById(R.id.emailCreateAccountButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
             }
         });
+
+
         findViewById(R.id.emailSignOutButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                signOut();
             }
         });
 
@@ -98,6 +100,49 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         // [END create_user_with_email]
+    }
+
+    private void signIn(String email, String password) {
+        Log.d("demo", "signIn:" + email);
+        if (!validateForm()) {
+            return;
+        }
+
+        //showProgressDialog();
+
+        // [START sign_in_with_email]
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("demo", "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            //updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("demo", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+
+                        // [START_EXCLUDE]
+//                        if (!task.isSuccessful()) {
+//                            mStatusTextView.setText(R.string.auth_failed);
+//                        }
+//                        hideProgressDialog();
+                        // [END_EXCLUDE]
+                    }
+                });
+        // [END sign_in_with_email]
+    }
+
+
+    private void signOut() {
+        mAuth.signOut();
+        //updateUI(null);
     }
 
     private boolean validateForm() {
