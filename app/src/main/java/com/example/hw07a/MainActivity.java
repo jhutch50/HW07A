@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         if (!validateForm()) {
             return;
         }
-
+ //
         //showProgressDialog();
 
         // [START create_user_with_email]
