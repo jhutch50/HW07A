@@ -91,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("demo", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(MainActivity.this,ProfileActivity.class);
+                            intent.putExtra("user_info",user);
                             startActivity(intent);
+                            finish();
                             //updateUI(user);
 
                         } else {

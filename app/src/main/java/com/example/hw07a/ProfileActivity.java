@@ -9,31 +9,105 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
     Bitmap bitmapUpload = null;
+    ImageView imageView;
+    EditText editTextFname;
+    EditText editTextLname;
+    RadioGroup radioGroup;
+    Uri imageURI;
+    String user_info;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    Button buttonsave;
+    int selectedButton =0;
+    String gender;
+    FirebaseFirestore db;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        imageView = findViewById(R.id.imageView);
+        buttonsave = findViewById(R.id.butto_save);
+        editTextFname = findViewById(R.id.et_firstname);
+        editTextLname = findViewById(R.id.et_lastname);
+        Bundle bundle = getIntent().getExtras();
+        db = FirebaseFirestore.getInstance();
+        user_info = bundle.getString("user_info");
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Filechooser();
+            }
+        });
+        radioGroup = findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                selectedButton= radioGroup.getCheckedRadioButtonId();
 
+                if(selectedButton==R.id.rb_male)
+                {
+                    gender="Male";
+                }
+                else if(selectedButton==R.id.rb_female) {
+                    gender = "Female";
+                }
+            }
+        });
+        buttonsave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profile userProfile = new profile();
+                String fname = editTextFname.getText().toString();
+                String lname = editTextLname.getText().toString();
+                userProfile.fname = fname;
+                userProfile.lname = lname;
+                userProfile.gender = gender;
+                userProfile.image = imageURI.toString();
+                Map<String,Object> moviemap = userProfile.toHashMap();
+                db.collection("users").document("12345").set(moviemap, SetOptions.merge())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(ProfileActivity.this, "Movie Added", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(ProfileActivity.this, "Not Added", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
 
     }
 
@@ -109,12 +183,11 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-//        Camera Callback........
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            bitmapUpload = imageBitmap;
+            Log.d("demo","image found");
+            imageURI = data.getData();
+            imageView.setImageURI(imageURI);
+
         }
     }
 }
