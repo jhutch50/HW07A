@@ -90,10 +90,10 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("demo", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(MainActivity.this,ProfileActivity.class);
+                            Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
                             intent.putExtra("user_info",user);
                             startActivity(intent);
-                            finish();
+
                             //updateUI(user);
 
                         } else {
@@ -129,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("demo", "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                            intent.putExtra("user_info",user);
+                            startActivity(intent);
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
