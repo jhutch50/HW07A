@@ -37,7 +37,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
-
             user  = (FirebaseUser) bundle.get("user_info");
             user_info = user.getUid();
         }
@@ -49,7 +48,9 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
                 intent.putExtra("user_info",user);
+                intent.putExtra("load_profile",true);
                 startActivity(intent);
+                finish();
             }
         });
 

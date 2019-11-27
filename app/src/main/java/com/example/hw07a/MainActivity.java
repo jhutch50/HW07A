@@ -92,21 +92,17 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
                             intent.putExtra("user_info",user);
+                            intent.putExtra("load_profile",false);
                             startActivity(intent);
-
-                            //updateUI(user);
+                            finish();
 
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w("demo", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(MainActivity.this, "User account already exists.",
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
 
-                        // [START_EXCLUDE]
-                        //hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
         // [END create_user_with_email]
@@ -118,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        //showProgressDialog();
 
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
@@ -132,30 +127,23 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                             intent.putExtra("user_info",user);
                             startActivity(intent);
-                            //updateUI(user);
+                            finish();
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w("demo", "signInWithEmail:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication Failed",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
                         }
 
-                        // [START_EXCLUDE]
                         if (!task.isSuccessful()) {
                             mStatusTextView.setText("User already signed in.");
                         }
-//                        hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
-        // [END sign_in_with_email]
     }
 
 
     private void signOut() {
         mAuth.signOut();
-        //updateUI(null);
     }
 
     private boolean validateForm() {
