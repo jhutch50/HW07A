@@ -154,7 +154,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
 //        Converting the Bitmap into a bytearrayOutputstream....
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        photoBitmap.compress(Bitmap.CompressFormat.PNG, 10, baos);
+        photoBitmap.compress(Bitmap.CompressFormat.PNG, 1, baos);
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = imageRepo.putBytes(data);

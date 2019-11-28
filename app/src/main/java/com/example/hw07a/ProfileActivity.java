@@ -21,11 +21,13 @@ import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private static final int ADD_TRIP_REQ_CODE = 123;
     FirebaseFirestore db;
     FirebaseUser user;
     Uri imageURI;
     String user_info;
     Button button_edit;
+    Button buttonaddTrip;
     ArrayList<profile> profiles = new ArrayList<>();
 
     @Override
@@ -34,7 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         button_edit = findViewById(R.id.btn_edit);
-
+        buttonaddTrip = findViewById(R.id.buttonTrip);
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             user  = (FirebaseUser) bundle.get("user_info");
@@ -54,9 +56,15 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        //Below is how to populate the ArrayList profiles. Not sure if this should be done inside a RecyclerView or not,
-        //but I do know that this is the way we are supposed to obtain them.
-        //If you look at the logs you'll see this works. Same thing can be done when listing trips collection
+        buttonaddTrip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this,AddTrip.class);
+                intent.putExtra("userId",user_info);
+                startActivityForResult(intent,ADD_TRIP_REQ_CODE);
+            }
+        });
+
 
         db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
