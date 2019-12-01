@@ -337,11 +337,12 @@ public class AddTrip extends AppCompatActivity {
         trip.locLat = loc.get("lat");
         trip.locLong = loc.get("lng");
         trip.photo = "";
-        trip.chatroom = "";
+        trip.chatroom.add("");
         trip.imageUrl = imageURL;
         trip.users.add(userId);
-        Map<String,Object> tripmap = trip.toHashMap();
         String id = UUID.randomUUID().toString().replace("-", "");
+        trip.id = id;
+        Map<String,Object> tripmap = trip.toHashMap();
         db.collection("trips").document(id).set(tripmap, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

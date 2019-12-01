@@ -8,24 +8,34 @@ import java.util.Map;
 
 public class Trip implements Serializable {
     String title;
-    String chatroom;
+    List<String> chatroom = new ArrayList<>();
     String photo;
     String placeId;
     String name;
     String imageUrl;
+    String id;
     List<String> users = new ArrayList<>();
 
-    public Trip(String title, String chatroom, String photo, String placeId, String name, String imageUrl, List<String> users, String creator_id, String locLat, String locLong) {
+    public Trip(String title, List<String> chatroom, String photo, String placeId, String name, String imageUrl, String id, List<String> users, String creator_id, String locLat, String locLong) {
         this.title = title;
         this.chatroom = chatroom;
         this.photo = photo;
         this.placeId = placeId;
         this.name = name;
         this.imageUrl = imageUrl;
+        this.id = id;
         this.users = users;
         this.creator_id = creator_id;
         this.locLat = locLat;
         this.locLong = locLong;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getImageUrl() {
@@ -82,11 +92,11 @@ public class Trip implements Serializable {
         this.title = title;
     }
 
-    public String getChatroom() {
+    public List<String> getChatroom() {
         return chatroom;
     }
 
-    public void setChatroom(String chatroom) {
+    public void setChatroom(List<String> chatroom) {
         this.chatroom = chatroom;
     }
 
@@ -141,6 +151,7 @@ public class Trip implements Serializable {
         tripemap.put("locLong",this.locLong);
         tripemap.put("creator_id",this.creator_id);
         tripemap.put("imageUrl",this.imageUrl);
+        tripemap.put("id",this.id);
         return tripemap;
     }
 }

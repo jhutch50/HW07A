@@ -16,19 +16,8 @@
         app:layout_constraintStart_toEndOf="@+id/uploadImage"
         app:srcCompat="@drawable/sendmessage" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="323dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
-        android:id="@+id/typeMessage"
+        android:id="@+id/EdittextMesage"
         android:layout_width="201dp"
         android:layout_height="56dp"
         android:layout_marginBottom="4dp"
@@ -46,29 +35,19 @@
         android:layout_marginBottom="4dp"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/typeMessage"
+        app:layout_constraintStart_toEndOf="@+id/EdittextMesage"
         app:srcCompat="@drawable/addimage" />
-
-    <ImageView
-        android:id="@+id/logout"
-        android:layout_width="42dp"
-        android:layout_height="54dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_lock_power_off" />
 
     <ListView
         android:id="@+id/messageList"
-        android:layout_width="wrap_content"
-        android:layout_height="405dp"
+        android:layout_width="411dp"
+        android:layout_height="538dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/typeMessage"
+        android:layout_marginBottom="184dp"
+        app:layout_constraintBottom_toTopOf="@+id/EdittextMesage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

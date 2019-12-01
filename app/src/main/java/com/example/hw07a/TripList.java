@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,5 +69,11 @@ public class TripList extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter =  new TripListAdapter(trips);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }

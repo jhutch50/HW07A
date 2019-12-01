@@ -1,10 +1,12 @@
 package com.example.hw07a;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,11 +35,20 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Trip trip = mData.get(position);
+        final Trip trip = mData.get(position);
         holder.textViewName.setText(trip.getName());
         holder.textViewdateID.setText(trip.getCreator_id());
         String urltoImage = trip.getImageUrl();
         Picasso.get().load(urltoImage).into(holder.imageView2);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(),ChatRoom.class);
+                intent.putExtra("trip",trip);
+                v.getContext().startActivity(intent);
+//                Toast.makeText(v.getContext(), trip.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
