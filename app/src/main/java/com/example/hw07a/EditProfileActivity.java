@@ -122,6 +122,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 userProfile.lname = lname;
                 userProfile.gender = gender;
                 userProfile.image = imageURL;
+                userProfile.id = user_info;
                 Map<String,Object> usermap = userProfile.toHashMap();
                 db.collection("users").document(user_info).set(usermap, SetOptions.merge())
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -154,7 +155,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
 //        Converting the Bitmap into a bytearrayOutputstream....
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        photoBitmap.compress(Bitmap.CompressFormat.PNG, 1, baos);
+        photoBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = imageRepo.putBytes(data);
@@ -172,10 +173,8 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()){
-                    Log.d("demo", "Image Download URL"+ task.getResult());
                     imageURL = task.getResult().toString();
                     Picasso.get().load(imageURL).into(imageView);
-                    Log.d("demo",imageURL);
                 }
             }
         });
@@ -228,13 +227,12 @@ public class EditProfileActivity extends AppCompatActivity {
         db.collection("users").document(user_info).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                String url = (String) documentSnapshot.get("uri");
+                String url = (String) documentSnapshot.get("image");
                 if(url!=null){
                     imageURL = url;
                     Picasso.get().load(url).into(imageView);
                 }
                 gender = (String) documentSnapshot.get("gender");
-                Log.d("Gender",gender);
                 if (gender.equals("Male")) {
                     radioGroup.check(R.id.rb_male);
                 }else if(gender.equals("Female")){

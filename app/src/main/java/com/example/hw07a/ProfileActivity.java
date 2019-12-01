@@ -28,6 +28,8 @@ public class ProfileActivity extends AppCompatActivity {
     String user_info;
     Button button_edit;
     Button buttonaddTrip;
+    Button buttonusers;
+    Button buttontrips;
     ArrayList<profile> profiles = new ArrayList<>();
 
     @Override
@@ -37,12 +39,23 @@ public class ProfileActivity extends AppCompatActivity {
 
         button_edit = findViewById(R.id.btn_edit);
         buttonaddTrip = findViewById(R.id.buttonTrip);
+        buttonusers = findViewById(R.id.buttonUsers);
+        buttontrips = findViewById(R.id.buttontrips);
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             user  = (FirebaseUser) bundle.get("user_info");
             user_info = user.getUid();
         }
         db = FirebaseFirestore.getInstance();
+
+        buttonusers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, UserListActivity.class);
+                intent.putExtra("user_info",user);
+                startActivityForResult(intent,123);
+            }
+        });
 
 
         button_edit.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +78,16 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        buttontrips.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, TripList.class);
+                intent.putExtra("user_info",user);
+                intent.putExtra("load_profile",true);
+                startActivity(intent);
+            }
+        });
+
 
         db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -77,7 +100,6 @@ public class ProfileActivity extends AppCompatActivity {
                         tempProfile.setGender((String) document.getData().get("gender"));
                         tempProfile.setImage((String) document.getData().get("uri"));
                         profiles.add(tempProfile);
-                        Log.d("demo",tempProfile.toString());
                     }
                 }
             }

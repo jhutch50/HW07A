@@ -1,7 +1,9 @@
 package com.example.hw07a;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Trip implements Serializable {
@@ -10,16 +12,36 @@ public class Trip implements Serializable {
     String photo;
     String placeId;
     String name;
+    String imageUrl;
+    List<String> users = new ArrayList<>();
 
-    public Trip(String title, String chatroom, String photo, String placeId, String name, String creator_id, String locLat, String locLong) {
+    public Trip(String title, String chatroom, String photo, String placeId, String name, String imageUrl, List<String> users, String creator_id, String locLat, String locLong) {
         this.title = title;
         this.chatroom = chatroom;
         this.photo = photo;
         this.placeId = placeId;
         this.name = name;
+        this.imageUrl = imageUrl;
+        this.users = users;
         this.creator_id = creator_id;
         this.locLat = locLat;
         this.locLong = locLong;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public List<String> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<String> users) {
+        this.users = users;
     }
 
     String creator_id;
@@ -98,10 +120,16 @@ public class Trip implements Serializable {
                 "title='" + title + '\'' +
                 ", chatroom='" + chatroom + '\'' +
                 ", photo='" + photo + '\'' +
-                ", locLat=" + locLat +
-                ", locLong=" + locLong +
+                ", placeId='" + placeId + '\'' +
+                ", name='" + name + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", users=" + users +
+                ", creator_id='" + creator_id + '\'' +
+                ", locLat='" + locLat + '\'' +
+                ", locLong='" + locLong + '\'' +
                 '}';
     }
+
     public Map toHashMap() {
         Map<String,Object> tripemap = new HashMap<>();
         tripemap.put("title",this.title);
@@ -112,6 +140,7 @@ public class Trip implements Serializable {
         tripemap.put("locLat",this.locLat);
         tripemap.put("locLong",this.locLong);
         tripemap.put("creator_id",this.creator_id);
+        tripemap.put("imageUrl",this.imageUrl);
         return tripemap;
     }
 }

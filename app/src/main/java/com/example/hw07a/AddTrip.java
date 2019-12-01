@@ -8,29 +8,43 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -51,8 +65,12 @@ public class AddTrip extends AppCompatActivity {
     String type;
     String placeId;
     String userId;
+    ProgressBar progressBar;
+    Bitmap bitmapUpload = null;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    ImageView imageViewCoverTrip;
     ProgressDialog progressDialog;
-
+    String imageURL;
     private static final String key= "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +79,20 @@ public class AddTrip extends AppCompatActivity {
         buttonsearch = findViewById(R.id.buttonSearch);
         buttonaddtrip = findViewById(R.id.buttonaddtrip);
         editTextcity = findViewById(R.id.editTextCity);
-
+        imageViewCoverTrip = findViewById(R.id.imageViewCoverPic);
         editTexttitle = findViewById(R.id.editTexttripName);
-
+        progressBar = findViewById(R.id.progressBar2);
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             userId = (String) bundle.get("userId");
         }
+
+        imageViewCoverTrip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Filechooser();
+            }
+        });
 
         buttonsearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,6 +250,83 @@ public class AddTrip extends AppCompatActivity {
         builderSingle.show();
     }
 
+    //    Upload Camera Photo to Cloud Storage....
+    private void uploadImage(Bitmap photoBitmap){
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageReference = firebaseStorage.getReference();
+        String id = UUID.randomUUID().toString().replace("-", "");
+        final StorageReference imageRepo = storageReference.child("images/"+id);
+
+//        Converting the Bitmap into a bytearrayOutputstream....
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        photoBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imageRepo.putBytes(data);
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+//                return null;
+                if (!task.isSuccessful()){
+                    throw task.getException();
+                }
+
+                return imageRepo.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()){
+                    imageURL = task.getResult().toString();
+                    Picasso.get().load(imageURL).into(imageViewCoverTrip);
+                }
+            }
+        });
+
+//        ProgressBar......
+
+        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                progressBar.setProgress((int) progress);
+                System.out.println("Upload is " + progress + "% done");
+            }
+        });
+
+    }
+    //    TAKE PHOTO USING CAMERA...
+
+    private void Filechooser(){
+        Intent intent = new Intent();
+        intent.setType("trpImage/");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        if(intent.resolveActivity(getPackageManager()) != null) {
+            progressBar.setProgress(0);
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Uri imageURI = data.getData();
+            Bitmap imageBitmap = null;
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageURI);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bitmapUpload = imageBitmap;
+            uploadImage(bitmapUpload);
+
+
+        }
+    }
+
     public void savePlaceToFireBase(Map<String,String> loc) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Trip trip = new Trip();
@@ -236,6 +338,8 @@ public class AddTrip extends AppCompatActivity {
         trip.locLong = loc.get("lng");
         trip.photo = "";
         trip.chatroom = "";
+        trip.imageUrl = imageURL;
+        trip.users.add(userId);
         Map<String,Object> tripmap = trip.toHashMap();
         String id = UUID.randomUUID().toString().replace("-", "");
         db.collection("trips").document(id).set(tripmap, SetOptions.merge())

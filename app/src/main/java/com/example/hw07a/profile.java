@@ -8,16 +8,25 @@ import java.util.Map;
 
 public class profile implements Serializable {
     String fname,lname,gender;
-    String image;
+    String image,id;
 
     public profile() {
     }
 
-    public profile(String fname, String lname, String gender, String image) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public profile(String fname, String lname, String gender, String image, String id) {
         this.fname = fname;
         this.lname = lname;
         this.gender = gender;
         this.image = image;
+        this.id = id;
     }
 
     public String getFname() {
@@ -67,7 +76,7 @@ public class profile implements Serializable {
         profilemap.put("fname",this.fname);
         profilemap.put("lname",this.lname);
         profilemap.put("gender",this.gender);
-        profilemap.put("uri",this.image);
+        profilemap.put("image",this.image);
         return profilemap;
     }
 }

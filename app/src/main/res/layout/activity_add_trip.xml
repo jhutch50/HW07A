@@ -46,11 +46,31 @@
         android:id="@+id/buttonaddtrip"
         android:layout_width="161dp"
         android:layout_height="66dp"
-        android:layout_marginTop="260dp"
+        android:layout_marginTop="60dp"
         android:text="Add Trip"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewCoverPic" />
+
+    <ImageView
+        android:id="@+id/imageViewCoverPic"
+        android:layout_width="190dp"
+        android:layout_height="193dp"
+        android:layout_marginTop="68dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCity"
+        app:srcCompat="@android:drawable/btn_star_big_on" />
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="259dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonaddtrip" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

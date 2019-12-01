@@ -68,9 +68,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        //updateUI(currentUser);
     }
 
     private void createAccount(String email, String password) {
@@ -78,10 +76,6 @@ public class MainActivity extends AppCompatActivity {
         if (!validateForm()) {
             return;
         }
- //
-        //showProgressDialog();
-
-        // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -100,28 +94,22 @@ public class MainActivity extends AppCompatActivity {
                             Log.w("demo", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(MainActivity.this, "User account already exists.",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
                         }
 
                     }
                 });
-        // [END create_user_with_email]
     }
 
     private void signIn(String email, String password) {
-        Log.d("demo", "signIn:" + email);
         if (!validateForm()) {
             return;
         }
 
-
-        // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d("demo", "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);

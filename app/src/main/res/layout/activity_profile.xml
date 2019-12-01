@@ -27,4 +27,27 @@
         app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_edit" />
+
+    <Button
+        android:id="@+id/buttonUsers"
+        android:layout_width="113dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:text="Users"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.442"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonTrip" />
+
+    <Button
+        android:id="@+id/buttontrips"
+        android:layout_width="105dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="30dp"
+        android:text="Trips"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.434"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonUsers" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
