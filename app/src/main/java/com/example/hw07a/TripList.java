@@ -51,6 +51,7 @@ public class TripList extends AppCompatActivity {
                             return;
                         }
                         if (queryDocumentSnapshots != null) {
+                            trips.clear();
                             for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                 if (documentSnapshot.getData() != null) {
                                     Trip trip  = (documentSnapshot.toObject(Trip.class));

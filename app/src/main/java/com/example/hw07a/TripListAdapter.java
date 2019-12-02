@@ -39,7 +39,11 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.ViewHo
         holder.textViewName.setText(trip.getName());
         holder.textViewdateID.setText(trip.getCreator_id());
         String urltoImage = trip.getImageUrl();
-        Picasso.get().load(urltoImage).into(holder.imageView2);
+        if(urltoImage == null || urltoImage.isEmpty()){
+            Picasso.get().load(ProfileActivity.deafultUrl).into(holder.imageView2);
+        } else {
+            Picasso.get().load(urltoImage).into(holder.imageView2);
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,7 +52,6 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.ViewHo
                 String userInfo = ProfileActivity.user_id;
                 intent.putExtra("user_id",userInfo);
                 v.getContext().startActivity(intent);
-//                Toast.makeText(v.getContext(), trip.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }

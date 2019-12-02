@@ -30,6 +30,7 @@ import java.util.Map;
 public class ProfileActivity extends AppCompatActivity {
 
     private static final int ADD_TRIP_REQ_CODE = 123;
+    public static String deafultUrl = "https://image.shutterstock.com/image-vector/no-image-available-sign-internet-600w-261719003.jpg";
     FirebaseFirestore db;
     public static Map userMap = new HashMap();
     public static String user_id;
@@ -82,7 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
                 intent.putExtra("user_info",user);
                 intent.putExtra("load_profile",true);
                 startActivity(intent);
-                finish();
+//                finish();
             }
         });
 

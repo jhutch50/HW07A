@@ -71,7 +71,7 @@ public class ChatRoom extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Log.d("demo","success");
-                                loadRecyclerView(trip.getChatroom());
+                                mAdapter.notifyDataSetChanged();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -90,8 +90,33 @@ public class ChatRoom extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(ChatRoom.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         Log.d("demo",message.toString());
-        mAdapter =  new ChatAdapter((ArrayList<String>) message);
+        mAdapter =  new ChatAdapter((ArrayList<String>) message, new ChatAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String mData) {
+                deleteMessage(mData);
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public void deleteMessage(String mData){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        trip.chatroom.remove(mData);
+        Map<String,Object> tripmap = trip.toHashMap();
+        db.collection("trips").document(trip.getId()).set(tripmap, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("demo","success");
+                        loadRecyclerView(trip.getChatroom());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ChatRoom.this, "Not Added", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void getMessage(){

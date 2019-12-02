@@ -36,7 +36,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.textViewName.setText(user.getFname()+ user.getLname());
         holder.textViewGender.setText(user.getGender());
         String urltoImage = user.getImage();
-        Picasso.get().load(urltoImage).into(holder.imageView2);
+        if(urltoImage == null || urltoImage.isEmpty()){
+            Picasso.get().load(ProfileActivity.deafultUrl).into(holder.imageView2);
+        } else {
+            Picasso.get().load(urltoImage).into(holder.imageView2);
+        }
     }
 
     @Override

@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                             intent.putExtra("user_info",user);
                             startActivity(intent);
-                            finish();
                         } else {
                             Log.w("demo", "signInWithEmail:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication Failed",

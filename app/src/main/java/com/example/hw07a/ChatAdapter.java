@@ -18,9 +18,11 @@ import java.util.HashMap;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     ArrayList<String> mData;
+    private final OnItemClickListener listener;
 
-    public ChatAdapter(ArrayList<String> mData) {
+    public ChatAdapter(ArrayList<String> mData,OnItemClickListener listener) {
         this.mData = mData;
+        this.listener = listener;
     }
 
     @NonNull
@@ -35,7 +37,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String message = mData.get(position);
+        final String message = mData.get(position);
         HashMap users = (HashMap) ProfileActivity.getHashMap();
         String[] messages = message.split("_");
         String name = (String) users.get(messages[0]);
@@ -48,6 +50,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         if(!messages[1].isEmpty()){
             holder.textViewMessage.setText(messages[1]);
         }
+        holder.imageViewdelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(message);
+            }
+        });
     }
 
     @Override
@@ -68,13 +76,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             textViewMessage = itemView.findViewById(R.id.textView_message);
             imageViewMessage = itemView.findViewById(R.id.imageViewId);
             imageViewdelete = itemView.findViewById(R.id.imageViewdelete);
-
-            imageViewdelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "clicked", Toast.LENGTH_SHORT).show();
-                }
-            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(String mData);
     }
 }

@@ -63,7 +63,7 @@ public class AddTrip extends AppCompatActivity {
     EditText editTexttitle;
     String city;
     String type;
-    String placeId;
+    String placeId="";
     String userId;
     ProgressBar progressBar;
     Bitmap bitmapUpload = null;
@@ -111,19 +111,26 @@ public class AddTrip extends AppCompatActivity {
         buttonaddtrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String input ="placeid="+placeId;
+                if(editTexttitle.getText().toString().isEmpty()){
+                    Toast.makeText(AddTrip.this, "Please enter title of the trip", Toast.LENGTH_SHORT).show();
+                } else {
+                    if(placeId.isEmpty()){
+                        Toast.makeText(AddTrip.this, "Please select a city", Toast.LENGTH_SHORT).show();
+                    } else {
+                        String input = "placeid=" + placeId;
+                        String apikey = "key=" + key;
+                        String url = "https://maps.googleapis.com/maps/api/place/details/json?" + input + "&" + apikey;
+                        String type = "place";
+                        new GetNewsAsync().execute(url, type);
 
-                String apikey = "key="+ key;
-                String url = "https://maps.googleapis.com/maps/api/place/details/json?"+ input+"&"+apikey;
-                String type = "place";
-                new GetNewsAsync().execute(url,type);
-
-                String name  = editTexttitle.getText().toString();
-                Intent returnIntent = getIntent();
-                returnIntent.putExtra("city",city);
-                returnIntent.putExtra("name",name);
-                setResult(AddTrip.RESULT_OK,returnIntent);
-                finish();
+                        String name = editTexttitle.getText().toString();
+                        Intent returnIntent = getIntent();
+                        returnIntent.putExtra("city", city);
+                        returnIntent.putExtra("name", name);
+                        setResult(AddTrip.RESULT_OK, returnIntent);
+                        finish();
+                    }
+                }
             }
         });
     }
