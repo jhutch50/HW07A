@@ -57,6 +57,10 @@ public class profile implements Serializable {
         return image;
     }
 
+    public String getName(){
+        return this.fname+" "+this.lname;
+    }
+
     public void setImage(String image) {
         this.image = image;
     }
@@ -77,6 +81,7 @@ public class profile implements Serializable {
         profilemap.put("lname",this.lname);
         profilemap.put("gender",this.gender);
         profilemap.put("image",this.image);
+        profilemap.put("id",this.id);
         return profilemap;
     }
 }

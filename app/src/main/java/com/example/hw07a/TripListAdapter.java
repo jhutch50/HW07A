@@ -45,6 +45,8 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.ViewHo
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(),ChatRoom.class);
                 intent.putExtra("trip",trip);
+                String userInfo = ProfileActivity.user_id;
+                intent.putExtra("user_id",userInfo);
                 v.getContext().startActivity(intent);
 //                Toast.makeText(v.getContext(), trip.toString(), Toast.LENGTH_SHORT).show();
             }

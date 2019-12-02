@@ -337,7 +337,6 @@ public class AddTrip extends AppCompatActivity {
         trip.locLat = loc.get("lat");
         trip.locLong = loc.get("lng");
         trip.photo = "";
-        trip.chatroom.add("");
         trip.imageUrl = imageURL;
         trip.users.add(userId);
         String id = UUID.randomUUID().toString().replace("-", "");

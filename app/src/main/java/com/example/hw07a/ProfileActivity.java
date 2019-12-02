@@ -1,6 +1,7 @@
 package com.example.hw07a;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,20 +10,28 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private static final int ADD_TRIP_REQ_CODE = 123;
     FirebaseFirestore db;
+    public static Map userMap = new HashMap();
+    public static String user_id;
     FirebaseUser user;
     Uri imageURI;
     String user_info;
@@ -36,7 +45,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
+        loadUsers();
         button_edit = findViewById(R.id.btn_edit);
         buttonaddTrip = findViewById(R.id.buttonTrip);
         buttonusers = findViewById(R.id.buttonUsers);
@@ -46,6 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
             user  = (FirebaseUser) bundle.get("user_info");
             user_info = user.getUid();
         }
+        user_id =user_info;
         db = FirebaseFirestore.getInstance();
 
         buttonusers.setOnClickListener(new View.OnClickListener() {
@@ -104,5 +114,33 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void loadUsers(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Toast.makeText(ProfileActivity.this, e + "", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (queryDocumentSnapshots != null) {
+                            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                if (documentSnapshot.getData() != null) {
+                                    profile user  = (documentSnapshot.toObject(profile.class));
+                                    Log.d("demo",user.getId()+user.getName());
+                                    userMap.put(user.getId(),user.getName());
+                                }
+                            }
+
+                        }
+                    }
+                });
+    }
+
+    public static Map getHashMap(){
+       return userMap;
     }
 }

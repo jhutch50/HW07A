@@ -6,14 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".ChatRoom">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:layout_width="409dp"
+        android:layout_height="556dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/EdittextMesage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <ImageView
         android:id="@+id/sendMessage"
         android:layout_width="72dp"
         android:layout_height="54dp"
-        android:layout_marginBottom="4dp"
         android:layout_marginStart="12dp"
+        android:layout_marginTop="59dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/uploadImage"
+        app:layout_constraintTop_toBottomOf="@+id/my_recycler_view"
         app:srcCompat="@drawable/sendmessage" />
 
     <EditText
@@ -32,22 +49,12 @@
         android:id="@+id/uploadImage"
         android:layout_width="72dp"
         android:layout_height="54dp"
+        android:layout_marginStart="12dp"
         android:layout_marginBottom="4dp"
-        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/EdittextMesage"
+        app:layout_constraintTop_toBottomOf="@+id/my_recycler_view"
+        app:layout_constraintVertical_bias="0.966"
         app:srcCompat="@drawable/addimage" />
-
-    <ListView
-        android:id="@+id/messageList"
-        android:layout_width="411dp"
-        android:layout_height="538dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="184dp"
-        app:layout_constraintBottom_toTopOf="@+id/EdittextMesage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
