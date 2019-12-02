@@ -151,6 +151,7 @@ public class Trip implements Serializable {
         tripemap.put("locLong",this.locLong);
         tripemap.put("creator_id",this.creator_id);
         tripemap.put("imageUrl",this.imageUrl);
+        tripemap.put("users",this.users);
         tripemap.put("id",this.id);
         return tripemap;
     }

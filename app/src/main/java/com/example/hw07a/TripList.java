@@ -1,5 +1,6 @@
 package com.example.hw07a;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -19,9 +22,11 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class TripList extends AppCompatActivity {
 
@@ -68,13 +73,27 @@ public class TripList extends AppCompatActivity {
     public void loadRecyclerView(){
         mLayoutManager = new LinearLayoutManager(TripList.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter =  new TripListAdapter(trips);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setOnClickListener(new View.OnClickListener() {
+        mAdapter =  new TripListAdapter(trips, new TripListAdapter.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onItemClick(Trip trip) {
+                trip.getUsers().add(ProfileActivity.user_id);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                Map<String,Object> tripmap = trip.toHashMap();
+                db.collection("trips").document(trip.getId()).set(tripmap, SetOptions.merge())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("demo","success");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(TripList.this, "Not Added", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
+        mRecyclerView.setAdapter(mAdapter);
     }
 }
