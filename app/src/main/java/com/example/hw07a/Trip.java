@@ -12,6 +12,8 @@ public class Trip implements Serializable {
     String photo;
     String placeId;
     String name;
+    String creator_id;
+    String locLat,locLong;
     String imageUrl;
     String id;
     List<String> users = new ArrayList<>();
@@ -54,8 +56,7 @@ public class Trip implements Serializable {
         this.users = users;
     }
 
-    String creator_id;
-    String locLat,locLong;
+
 
     public String getPlaceId() {
         return placeId;

@@ -12,9 +12,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.ViewHolder> {
 
@@ -50,7 +55,45 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.ViewHo
         final String userInfo = ProfileActivity.user_id;
         if(trip.getUsers().contains(userInfo)){
            holder.buttonjoin.setVisibility(View.INVISIBLE);
+        }else{
+            holder.buttonremove.setVisibility(View.INVISIBLE);
         }
+
+        if(trip.getCreator_id().equals(userInfo)){
+            holder.buttonremove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("trips").document(trip.id).delete()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(view.getContext(), "Trip successfully deleted", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+            });
+        }else{
+            holder.buttonremove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String,Object> updates = new HashMap<>();
+                    updates.put("users", FieldValue.arrayRemove(userInfo));
+                    db.collection("trips").document(trip.id).update(updates)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(view.getContext(), "You are no longer a part of this trip", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                }
+            });
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,12 +129,14 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.ViewHo
         TextView textViewdateID;
         ImageView imageView2;
         Button buttonjoin;
+        Button buttonremove;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.textViewNameID);
             textViewdateID = itemView.findViewById(R.id.textViewdateID);
             imageView2 = itemView.findViewById(R.id.imageViewtripID);
             buttonjoin = itemView.findViewById(R.id.buttonJoin);
+            buttonremove = itemView.findViewById(R.id.buttonRemove);
 
         }
     }

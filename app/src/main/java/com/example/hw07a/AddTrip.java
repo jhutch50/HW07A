@@ -71,7 +71,7 @@ public class AddTrip extends AppCompatActivity {
     ImageView imageViewCoverTrip;
     ProgressDialog progressDialog;
     String imageURL;
-    private static final String key= "";
+    private static final String key= "AIzaSyDs49ADB1yG0Nz7BbiaaSOR87SrO7mXp74";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
