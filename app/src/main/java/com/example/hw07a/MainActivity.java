@@ -52,17 +52,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        findViewById(R.id.emailSignOutButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signOut();
-            }
-        });
-
-
-
-
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -58,6 +59,12 @@ public class ProfileActivity extends AppCompatActivity {
         user_id =user_info;
         db = FirebaseFirestore.getInstance();
 
+        findViewById(R.id.buttonSignOut).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signOut();
+            }
+        });
         buttonusers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,5 +149,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     public static Map getHashMap(){
        return userMap;
+    }
+    private void signOut() {
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+        finish();
     }
 }

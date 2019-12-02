@@ -50,23 +50,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailSignInButton" />
 
-    <Button
-        android:id="@+id/emailSignOutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Sign Out"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailCreateAccountButton" />
-
     <TextView
         android:id="@+id/status"
         android:layout_width="12dp"
         android:layout_height="82dp"
-        android:layout_marginTop="236dp"
+        android:layout_marginTop="304dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailSignOutButton" />
+        app:layout_constraintTop_toBottomOf="@+id/emailCreateAccountButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
