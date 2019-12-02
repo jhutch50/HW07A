@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-
-        mStatusTextView = findViewById(R.id.status);
         mEmailField = findViewById(R.id.fieldEmail);
         mPasswordField = findViewById(R.id.fieldPassword);
 
@@ -106,13 +104,10 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             Log.w("demo", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication Failed",
+                            Toast.makeText(MainActivity.this, task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        if (!task.isSuccessful()) {
-                            mStatusTextView.setText("User already signed in.");
-                        }
                     }
                 });
     }

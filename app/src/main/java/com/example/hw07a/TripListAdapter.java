@@ -44,8 +44,8 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final Trip trip = mData.get(position);
-        holder.textViewName.setText(trip.getName());
-        holder.textViewdateID.setText(trip.getCreator_id());
+        holder.textViewName.setText(trip.getTitle());
+        holder.textViewdateID.setText(trip.getName());
         String urltoImage = trip.getImageUrl();
         if(urltoImage == null || urltoImage.isEmpty()){
             Picasso.get().load(ProfileActivity.deafultUrl).into(holder.imageView2);
@@ -56,11 +56,11 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.ViewHo
         if(trip.getUsers().contains(userInfo)){
            holder.buttonjoin.setVisibility(View.INVISIBLE);
         }else{
-            holder.buttonremove.setVisibility(View.INVISIBLE);
+            holder.imageViewDelete.setVisibility(View.INVISIBLE);
         }
 
         if(trip.getCreator_id().equals(userInfo)){
-            holder.buttonremove.setOnClickListener(new View.OnClickListener() {
+            holder.imageViewDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View view) {
 
@@ -75,10 +75,9 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.ViewHo
                 }
             });
         }else{
-            holder.buttonremove.setOnClickListener(new View.OnClickListener() {
+            holder.imageViewDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View view) {
-
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String,Object> updates = new HashMap<>();
                     updates.put("users", FieldValue.arrayRemove(userInfo));
@@ -130,13 +129,14 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.ViewHo
         ImageView imageView2;
         Button buttonjoin;
         Button buttonremove;
+        ImageView imageViewDelete;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.textViewNameID);
             textViewdateID = itemView.findViewById(R.id.textViewdateID);
             imageView2 = itemView.findViewById(R.id.imageViewtripID);
             buttonjoin = itemView.findViewById(R.id.buttonJoin);
-            buttonremove = itemView.findViewById(R.id.buttonRemove);
+            imageViewDelete = itemView.findViewById(R.id.imageViewDelete);
 
         }
     }
